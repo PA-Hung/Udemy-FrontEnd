@@ -1,4 +1,4 @@
-import Nav from "./components/Navigation/Nav";
+//import Nav from "./components/Navigation/Nav";
 import React from "react";
 import './App.scss';
 import {
@@ -13,9 +13,9 @@ function App() {
     <Router>
       <div className="App">
         <header className="App-container">
-          <Nav />
-
-          <Switch>
+          {/* <Nav /> */}
+          <Login />
+          {/* <Switch>
             <Route exact path="/">
               Home
             </Route>
@@ -34,7 +34,7 @@ function App() {
             <Route path="*">
               404 not found
             </Route>
-          </Switch>
+          </Switch> */}
 
         </header>
       </div>
