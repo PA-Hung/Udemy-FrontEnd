@@ -1,8 +1,24 @@
-import './Login.scss'
+import './Register.scss'
 import facebook from '../../assets/images/facebook.png'
-const Login = (props) => {
+import { useHistory } from 'react-router-dom';
+import axios from 'axios';
+import { useEffect } from 'react';
+
+
+const Register = (props) => {
+    let history = useHistory();
+    const handleLogin = () => {
+        history.push("/login");
+    }
+
+    useEffect(() => {
+        axios.get('http://localhost:6969/api/test-api').then(data => {
+            console.log('>>>>>>> check data axiso:', data)
+        })
+    }, [])
+
     return (
-        <div className="login-container">
+        <div className="register-container">
             <div className="container">
                 <div className="row px-3 px-sm-0 justify-content-center">
 
@@ -22,13 +38,17 @@ const Login = (props) => {
                         <div className='facebook-right d-md-none'>
                             <img className='logo-mobi' src={facebook} alt="logo-mobi" />
                         </div>
-                        <input className='Input-email form-control' type='text' placeholder='Email address or your phone number' />
+                        <input className='Input-email form-control' type='text' placeholder='Email address' />
+                        <input className='Input-phone form-control' type='text' placeholder='Phone number' />
+                        <input className='Input-username form-control' type='text' placeholder='User name' />
                         <input className='Input-pass form-control' type='password' placeholder='Password' />
-                        <button className='btLogin btn btn-primary'>Login</button>
+                        <input className='Input-pass form-control' type='password' placeholder='Re-enter Password' />
+                        <button className='btLogin btn btn-primary'>Register</button>
                         <span className='text-center'><a className='forgot-pass' href='xxx'>Forgotten password?</a></span>
                         <hr />
                         <div className='text-center'>
-                            <button className='btCNAcc btn btn-success'>Create New Account</button>
+                            <button className='btLogin btn btn-success'
+                                onClick={() => handleLogin()}>Already have account? Login</button>
                         </div>
                     </div>
                 </div>
@@ -37,4 +57,4 @@ const Login = (props) => {
     )
 
 }
-export default Login
+export default Register

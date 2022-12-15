@@ -14,8 +14,11 @@ const Nav = (props) => {
             <NavLink to="/contact" >
                 Contact
             </NavLink>
-            <NavLink to="/dashboard" >
-                Dashboard
+            <NavLink to="/login" >
+                Login
+            </NavLink>
+            <NavLink to="/register" >
+                Register
             </NavLink>
         </div>
     )

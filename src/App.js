@@ -1,4 +1,4 @@
-//import Nav from "./components/Navigation/Nav";
+import Nav from "./components/Navigation/Nav";
 import React from "react";
 import './App.scss';
 import {
@@ -6,27 +6,27 @@ import {
   Switch,
   Route
 } from "react-router-dom";
-import Login from "./components/Login/Login";
+import Login from "./components/Auth/Login";
+import Register from "./components/Auth/Register";
 
 function App() {
   return (
     <Router>
       <div className="App">
         <header className="App-container">
-          {/* <Nav /> */}
-          <Login />
-          {/* <Switch>
+          <Nav />
+          <Switch>
             <Route exact path="/">
               Home
             </Route>
             <Route path="/about">
               About
             </Route>
-            <Route path="/contact">
-              Contact
-            </Route>
             <Route path="/login">
               <Login />
+            </Route>
+            <Route path="/register">
+              <Register />
             </Route>
             <Route path="/dashboard">
               Dashboard
@@ -34,7 +34,7 @@ function App() {
             <Route path="*">
               404 not found
             </Route>
-          </Switch> */}
+          </Switch>
 
         </header>
       </div>
