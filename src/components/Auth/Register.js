@@ -10,6 +10,16 @@ const Register = (props) => {
     const handleLogin = () => {
         history.push("/login");
     }
+    // Hiển thị biểu tượng chấm thang ở các ô input, mặc định dc set là true
+    const defaultValidInput = {
+        isValidEmail: true,
+        isValidPhone: true,
+        isValidUsername: true,
+        isValidPassword: true,
+        isValidConfirmPassword: true,
+    }
+
+    const [ojbCheckInput, setOjbCheckInput] = useState(defaultValidInput)
 
     const [email, setEmail] = useState("")
     const [phone, setPhone] = useState("")
@@ -18,34 +28,43 @@ const Register = (props) => {
     const [confirmPass, setConfirmPass] = useState("")
 
     const isValidInputs = () => {
+        setOjbCheckInput(defaultValidInput);
+
         if (!email) {
             toast.error('Email is required')
+            setOjbCheckInput({ ...defaultValidInput, isValidEmail: false })
             return false
         }
         let regx = /\S+@\S+\.\S+/;
         if (!regx.test(email)) {
             toast.error('Invalid email')
+            setOjbCheckInput({ ...defaultValidInput, isValidEmail: false })
             return false
         }
         if (!phone) {
             toast.error('Phone is required')
+            setOjbCheckInput({ ...defaultValidInput, isValidPhone: false })
             return false
         }
         let phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
         if (!phoneno.test(phone)) {
             toast.error('Invalid phone number')
+            setOjbCheckInput({ ...defaultValidInput, isValidPhone: false })
             return false
         }
         if (!username) {
             toast.error('Username is required')
+            setOjbCheckInput({ ...defaultValidInput, isValidUsername: false })
             return false
         }
         if (!pass) {
             toast.error('Password is required')
+            setOjbCheckInput({ ...defaultValidInput, isValidPassword: false })
             return false
         }
         if (pass !== confirmPass) {
             toast.error('Password is not the same')
+            setOjbCheckInput({ ...defaultValidInput, isValidConfirmPassword: false })
             return false
         }
 
@@ -54,10 +73,10 @@ const Register = (props) => {
 
     const handleRegister = () => {
         let check = isValidInputs()
-        if (!check) {
-
-        } else {
-            let userData = { email, phone, username, pass }
+        if (check === true) {
+            axios.post('http://localhost:6969/api/v1/register', {
+                email, phone, username, pass
+            })
             toast('🦄 Wow so easy!',
                 {
                     position: "top-right",
@@ -74,7 +93,7 @@ const Register = (props) => {
     }
 
     useEffect(() => {
-        // axios.get('http://localhost:6969/api/test-api').then(data => {
+        // axios.get('http://localhost:6969/api/v1/test-api').then(data => {
         //     console.log('>>>>>>> check data axiso:', data)
         // })
     }, [])
@@ -101,27 +120,27 @@ const Register = (props) => {
                             <img className='logo-mobi' src={facebook} alt="logo-mobi" />
                         </div>
                         <input
-                            className='Input-email form-control'
+                            className={ojbCheckInput.isValidEmail ? 'Input-email form-control' : 'Input-email form-control is-invalid'}
                             type='text' placeholder='Email address'
                             value={email} onChange={(event) => setEmail(event.target.value)}
                         />
                         <input
-                            className='Input-phone form-control'
+                            className={ojbCheckInput.isValidPhone ? 'Input-phone form-control' : 'Input-phone form-control is-invalid'}
                             type='text' placeholder='Phone number'
                             value={phone} onChange={(event) => setPhone(event.target.value)}
                         />
                         <input
-                            className='Input-username form-control'
+                            className={ojbCheckInput.isValidUsername ? 'Input-username form-control' : 'Input-username form-control is-invalid'}
                             type='text' placeholder='User name'
                             value={username} onChange={(event) => setUsername(event.target.value)}
                         />
                         <input
-                            className='Input-pass form-control'
+                            className={ojbCheckInput.isValidPassword ? 'Input-pass form-control' : 'Input-pass form-control is-invalid'}
                             type='password' placeholder='Password'
                             value={pass} onChange={(event) => setPass(event.target.value)}
                         />
                         <input
-                            className='Input-pass form-control'
+                            className={ojbCheckInput.isValidConfirmPassword ? 'Input-pass form-control' : 'Input-pass form-control is-invalid'}
                             type='password' placeholder='Re-enter Password'
                             value={confirmPass} onChange={(event) => setConfirmPass(event.target.value)}
                         />
