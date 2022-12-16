@@ -2,8 +2,8 @@ import './Register.scss'
 import facebook from '../../assets/images/facebook.png'
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
-import { useEffect } from 'react';
-
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 const Register = (props) => {
     let history = useHistory();
@@ -11,10 +11,72 @@ const Register = (props) => {
         history.push("/login");
     }
 
+    const [email, setEmail] = useState("")
+    const [phone, setPhone] = useState("")
+    const [username, setUsername] = useState("")
+    const [pass, setPass] = useState("")
+    const [confirmPass, setConfirmPass] = useState("")
+
+    const isValidInputs = () => {
+        if (!email) {
+            toast.error('Email is required')
+            return false
+        }
+        let regx = /\S+@\S+\.\S+/;
+        if (!regx.test(email)) {
+            toast.error('Invalid email')
+            return false
+        }
+        if (!phone) {
+            toast.error('Phone is required')
+            return false
+        }
+        let phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+        if (!phoneno.test(phone)) {
+            toast.error('Invalid phone number')
+            return false
+        }
+        if (!username) {
+            toast.error('Username is required')
+            return false
+        }
+        if (!pass) {
+            toast.error('Password is required')
+            return false
+        }
+        if (pass !== confirmPass) {
+            toast.error('Password is not the same')
+            return false
+        }
+
+        return true
+    }
+
+    const handleRegister = () => {
+        let check = isValidInputs()
+        if (!check) {
+
+        } else {
+            let userData = { email, phone, username, pass }
+            toast('🦄 Wow so easy!',
+                {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+        }
+
+    }
+
     useEffect(() => {
-        axios.get('http://localhost:6969/api/test-api').then(data => {
-            console.log('>>>>>>> check data axiso:', data)
-        })
+        // axios.get('http://localhost:6969/api/test-api').then(data => {
+        //     console.log('>>>>>>> check data axiso:', data)
+        // })
     }, [])
 
     return (
@@ -38,12 +100,36 @@ const Register = (props) => {
                         <div className='facebook-right d-md-none'>
                             <img className='logo-mobi' src={facebook} alt="logo-mobi" />
                         </div>
-                        <input className='Input-email form-control' type='text' placeholder='Email address' />
-                        <input className='Input-phone form-control' type='text' placeholder='Phone number' />
-                        <input className='Input-username form-control' type='text' placeholder='User name' />
-                        <input className='Input-pass form-control' type='password' placeholder='Password' />
-                        <input className='Input-pass form-control' type='password' placeholder='Re-enter Password' />
-                        <button className='btLogin btn btn-primary'>Register</button>
+                        <input
+                            className='Input-email form-control'
+                            type='text' placeholder='Email address'
+                            value={email} onChange={(event) => setEmail(event.target.value)}
+                        />
+                        <input
+                            className='Input-phone form-control'
+                            type='text' placeholder='Phone number'
+                            value={phone} onChange={(event) => setPhone(event.target.value)}
+                        />
+                        <input
+                            className='Input-username form-control'
+                            type='text' placeholder='User name'
+                            value={username} onChange={(event) => setUsername(event.target.value)}
+                        />
+                        <input
+                            className='Input-pass form-control'
+                            type='password' placeholder='Password'
+                            value={pass} onChange={(event) => setPass(event.target.value)}
+                        />
+                        <input
+                            className='Input-pass form-control'
+                            type='password' placeholder='Re-enter Password'
+                            value={confirmPass} onChange={(event) => setConfirmPass(event.target.value)}
+                        />
+
+                        <button
+                            className='btLogin btn btn-primary'
+                            onClick={() => handleRegister()}
+                        >Register</button>
                         <span className='text-center'><a className='forgot-pass' href='xxx'>Forgotten password?</a></span>
                         <hr />
                         <div className='text-center'>
