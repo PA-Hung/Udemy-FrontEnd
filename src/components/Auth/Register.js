@@ -1,9 +1,9 @@
 import './Register.scss'
 import facebook from '../../assets/images/facebook.png'
 import { useHistory } from 'react-router-dom';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import { registerNewUser } from '../../services/apiService';
 
 const Register = (props) => {
     let history = useHistory();
@@ -62,6 +62,12 @@ const Register = (props) => {
             setOjbCheckInput({ ...defaultValidInput, isValidPassword: false })
             return false
         }
+        // let regexPass = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,8}$/;
+        // if (!regexPass.test(pass)) {
+        //     toast.error('Password quá đơn giản')
+        //     setOjbCheckInput({ ...defaultValidInput, isValidPassword: false })
+        //     return false
+        // }
         if (pass !== confirmPass) {
             toast.error('Password is not the same')
             setOjbCheckInput({ ...defaultValidInput, isValidConfirmPassword: false })
@@ -71,23 +77,43 @@ const Register = (props) => {
         return true
     }
 
-    const handleRegister = () => {
+    const handleRegister = async () => {
         let check = isValidInputs()
         if (check === true) {
-            axios.post('http://localhost:6969/api/v1/register', {
-                email, phone, username, pass
-            })
-            toast('🦄 Wow so easy!',
-                {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                });
+            let response = await registerNewUser(email, phone, username, pass)
+            let dataFromBackEnd = response.data
+            console.log('>>>>>', dataFromBackEnd)
+            if (+dataFromBackEnd.EC === 0) {
+                toast('🦄 Wow so easy create new user!',
+                    {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "light",
+
+                    }, dataFromBackEnd.EM);
+                history.push("/login");
+            } else {
+                //console.log('>>>>> check data:', dataFromBackEnd.DT)
+                if (dataFromBackEnd.DT === 'email') {
+                    setOjbCheckInput({ ...defaultValidInput, isValidEmail: false })
+                }
+                if (dataFromBackEnd.DT === 'phone') {
+                    setOjbCheckInput({ ...defaultValidInput, isValidPhone: false })
+                }
+                toast.error(dataFromBackEnd.EM)
+            }
+
+            // setEmail("")
+            // setPhone("")
+            // setUsername("")
+            // setPass("")
+            // setConfirmPass("")
+
         }
 
     }
