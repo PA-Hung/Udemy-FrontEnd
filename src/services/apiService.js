@@ -5,4 +5,11 @@ const registerNewUser = async (email, phone, username, pass) => {
         email, phone, username, pass
     })
 }
-export { registerNewUser }
+
+const loginUser = async (valueLogin, password) => {
+    return await axios.post('http://localhost:6969/api/v1/login', {
+        valueLogin, password
+    })
+}
+
+export { registerNewUser, loginUser }

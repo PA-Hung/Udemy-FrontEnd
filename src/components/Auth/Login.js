@@ -1,10 +1,38 @@
 import './Login.scss'
 import facebook from '../../assets/images/facebook.png'
 import { useHistory } from 'react-router-dom';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
+import { loginUser } from '../../services/apiService'
 
 
 const Login = (props) => {
     let history = useHistory();
+    const [valueLogin, setValueLogin] = useState('')
+    const [password, setPassword] = useState('')
+
+    const defaultObjValidInput = {
+        isValidLogin: true,
+        isValidPass: true
+    }
+    const [objValidInput, SetObjValidInput] = useState(defaultObjValidInput)
+
+    const handleLogin = async () => {
+        SetObjValidInput(defaultObjValidInput)
+        if (!valueLogin) {
+            toast.error('Hãy nhập email hoặc số điện thoại của bạn')
+            SetObjValidInput({ ...defaultObjValidInput, isValidLogin: false })
+            return false
+        }
+        if (!password) {
+            toast.error('Hãy nhập mật khẩu của bạn')
+            SetObjValidInput({ ...defaultObjValidInput, isValidPass: false })
+            return false
+        }
+        let response = await loginUser(valueLogin, password)
+        console.log('check respone', response.data)
+    }
+
     const handleCreateNewAccount = () => {
         history.push("/register");
     }
@@ -30,10 +58,31 @@ const Login = (props) => {
                         <div className='facebook-right d-md-none'>
                             <img className='logo-mobi' src={facebook} alt="logo-mobi" />
                         </div>
-                        <input className='Input-email form-control' type='text' placeholder='Email address or your phone number' />
-                        <input className='Input-pass form-control' type='password' placeholder='Password' />
-                        <button className='btLogin btn btn-primary'>Login</button>
-                        <span className='text-center'><a className='forgot-pass' href='xxx'>Forgotten password?</a></span>
+                        <input
+                            className={
+                                objValidInput.isValidLogin ?
+                                    'Input-email form-control' :
+                                    'Input-email form-control is-invalid'
+                            } type='text'
+                            placeholder='Email address or your phone number'
+                            value={valueLogin} onChange={(event) => setValueLogin(event.target.value)}
+                        />
+                        <input
+                            className={
+                                objValidInput.isValidPass ?
+                                    'Input-pass form-control' :
+                                    'Input-pass form-control is-invalid'
+                            } type='password'
+                            placeholder='Password'
+                            value={password} onChange={(event) => setPassword(event.target.value)}
+                        />
+                        <button
+                            className='btLogin btn btn-primary'
+                            onClick={() => handleLogin()}
+                        >Login</button>
+                        <span className='text-center'>
+                            <a className='forgot-pass' href='xxx'>Forgotten password?</a>
+                        </span>
                         <hr />
                         <div className='text-center'>
                             <button className='btCNAcc btn btn-success'
