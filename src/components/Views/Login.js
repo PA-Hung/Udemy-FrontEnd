@@ -30,7 +30,26 @@ const Login = (props) => {
             return false
         }
         let response = await loginUser(valueLogin, password)
-        console.log('check respone', response.data)
+        if (response && response.data && response.data.EC === 0) {
+            let data = {
+                isAuthenticated: true,
+                toke: 'faketoken'
+            }
+            sessionStorage.setItem("account", JSON.stringify(data));
+            history.push("/users");
+            window.location.reload();
+            // redux
+        }
+        if (response && response.data && response.data.EC !== 0) {
+            toast.error(response.data.EM)
+        }
+
+    }
+
+    const handleKeyPressLogin = (event) => {
+        if (event.code === "Enter") {
+            handleLogin()
+        }
     }
 
     const handleCreateNewAccount = () => {
@@ -65,7 +84,8 @@ const Login = (props) => {
                                     'Input-email form-control is-invalid'
                             } type='text'
                             placeholder='Email address or your phone number'
-                            value={valueLogin} onChange={(event) => setValueLogin(event.target.value)}
+                            value={valueLogin}
+                            onChange={(event) => setValueLogin(event.target.value)}
                         />
                         <input
                             className={
@@ -74,7 +94,9 @@ const Login = (props) => {
                                     'Input-pass form-control is-invalid'
                             } type='password'
                             placeholder='Password'
-                            value={password} onChange={(event) => setPassword(event.target.value)}
+                            value={password}
+                            onChange={(event) => setPassword(event.target.value)}
+                            onKeyPress={(event) => handleKeyPressLogin(event)}
                         />
                         <button
                             className='btLogin btn btn-primary'
