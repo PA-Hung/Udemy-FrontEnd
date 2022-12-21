@@ -1,26 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Nav.scss";
 import { NavLink } from "react-router-dom";
 
 const Nav = (props) => {
+    const [showNav, setShowNav] = useState(false)
+    useEffect(() => {
+        let session = sessionStorage.getItem("account");
+        if (session) {
+            setShowNav(true)
+        }
+
+    }, [])
     return (
-        <div className="topnav">
-            <NavLink to="/" activeclassname="selected" exact>
-                Home
-            </NavLink>
-            <NavLink to="/about" >
-                About
-            </NavLink>
-            <NavLink to="/contact" >
-                Contact
-            </NavLink>
-            <NavLink to="/login" >
-                Login
-            </NavLink>
-            <NavLink to="/register" >
-                Register
-            </NavLink>
-        </div>
+        <>
+            {showNav === true &&
+                <div className="topnav">
+                    <NavLink to="/" activeclassname="selected" exact>
+                        Home
+                    </NavLink>
+                    <NavLink to="/users" >
+                        User
+                    </NavLink>
+                    <NavLink to="/projects" >
+                        Project
+                    </NavLink>
+                    <NavLink to="/login" >
+                        Login
+                    </NavLink>
+                    <NavLink to="/register" >
+                        Register
+                    </NavLink>
+                </div>
+            }
+        </>
     )
 }
 

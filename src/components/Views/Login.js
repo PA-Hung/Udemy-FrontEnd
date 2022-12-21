@@ -1,13 +1,22 @@
 import './Login.scss'
 import facebook from '../../assets/images/facebook.png'
 import { useHistory } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { loginUser } from '../../services/apiService'
 
 
 const Login = (props) => {
     let history = useHistory();
+
+    useEffect(() => {
+        let session = sessionStorage.getItem("account");
+        if (session) {
+            history.push("/");
+            window.location.reload();
+        }
+    }, [])
+
     const [valueLogin, setValueLogin] = useState('')
     const [password, setPassword] = useState('')
 
