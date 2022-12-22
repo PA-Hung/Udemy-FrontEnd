@@ -1,15 +1,25 @@
 import axios from "axios"
 
-const registerNewUser = async (email, phone, username, pass) => {
-    return await axios.post('http://localhost:6969/api/v1/register', {
+const registerNewUser = (email, phone, username, pass) => {
+    return axios.post('http://localhost:6969/api/v1/register', {
         email, phone, username, pass
     })
 }
 
-const loginUser = async (valueLogin, password) => {
-    return await axios.post('http://localhost:6969/api/v1/login', {
+const loginUser = (valueLogin, password) => {
+    return axios.post('http://localhost:6969/api/v1/login', {
         valueLogin, password
     })
 }
 
-export { registerNewUser, loginUser }
+const fetchAllUser = (page, limit) => {
+    return axios.get(`http://localhost:6969/api/v1/user/read?page=${page}&limit=${limit}`)
+}
+
+const deleteUser = (user) => {
+    return axios.delete('http://localhost:6969/api/v1/user/delete', {
+        data: { id: user.id }
+    })
+}
+
+export { registerNewUser, loginUser, fetchAllUser, deleteUser }
