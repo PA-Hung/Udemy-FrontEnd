@@ -3,7 +3,8 @@ import './Users.scss'
 import { fetchAllUser, deleteUser } from '../../services/apiService'
 import ReactPaginate from 'react-paginate';
 import { toast } from 'react-toastify';
-import ModalComfirm from '../ModalComfirm';
+import ModalComfirm from '../Modal/ModalComfirm';
+import ModalUser from '../Modal/ModalUser';
 
 
 const Users = (props) => {
@@ -147,6 +148,9 @@ const Users = (props) => {
                     handleClose={handleClose}
                     confirmDeleteUser={confirmDeleteUser}
                     dataModal={dataModal}
+                />
+                <ModalUser
+                    title={'Tạo người dùng mới'}
                 />
             </div>
         </>
