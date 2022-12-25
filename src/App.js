@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [account, setAccount] = useState({})
-  console.log(account)
+  //console.log(account)
   useEffect(() => {
     let session = sessionStorage.getItem("account");
     if (session) {

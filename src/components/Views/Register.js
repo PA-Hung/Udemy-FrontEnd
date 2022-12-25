@@ -90,7 +90,7 @@ const Register = (props) => {
         if (check === true) {
             let response = await registerNewUser(email, phone, username, pass)
             let dataFromBackEnd = response.data
-            console.log('>>>>>', dataFromBackEnd)
+            //console.log('>>>>>', dataFromBackEnd)
             if (+dataFromBackEnd.EC === 0) {
                 toast('🦄 Wow so easy create new user!',
                     {

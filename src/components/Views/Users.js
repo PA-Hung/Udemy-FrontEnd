@@ -14,6 +14,7 @@ const Users = (props) => {
     const [totalPages, setTotalPages] = useState(0)
     const [isShowModalComfirm, setIsShowModalComfirm] = useState(false)
     const [dataModal, setDataModal] = useState({})
+    const [isShowModalUser, setIsShowModalUser] = useState(false)
 
     useEffect(() => {
         fetchUsers()
@@ -25,7 +26,7 @@ const Users = (props) => {
             setTotalPages(response.data.DT.totalPages)
             setListUsers(response.data.DT.users)
         }
-        console.log('check >>>>>>>>> list user :', response.data.DT)
+        //console.log('check >>>>>>>>> list user :', response.data.DT)
     }
 
     const handlePageClick = async (event) => {
@@ -46,7 +47,7 @@ const Users = (props) => {
 
     const confirmDeleteUser = async () => {
         let response = await deleteUser(dataModal)
-        console.log('check user delete >>>>>>>', response)
+        //console.log('check user delete >>>>>>>', response)
         if (response && response.data.EC === 0) {
             toast.success(response.data.EM)
             await fetchUsers()
@@ -54,6 +55,10 @@ const Users = (props) => {
         } else {
             toast.success(response.data.EM)
         }
+    }
+
+    const onHideModelUser = () => {
+        setIsShowModalUser(false)
     }
 
     return (
@@ -64,7 +69,8 @@ const Users = (props) => {
                         <div className='title-table pt-5'><h3>Table User Info</h3></div>
                         <div className='action d-flex justify-content-end'>
                             <button className='btn btn-success mx-3'>Refesh</button>
-                            <button className='btn btn-primary'>Add new user</button>
+                            <button className='btn btn-primary'
+                                onClick={() => setIsShowModalUser(true)}>Add new user</button>
                         </div>
                     </div>
                     <div><hr /></div>
@@ -151,6 +157,8 @@ const Users = (props) => {
                 />
                 <ModalUser
                     title={'Tạo người dùng mới'}
+                    show={isShowModalUser}
+                    onHide={onHideModelUser}
                 />
             </div>
         </>
