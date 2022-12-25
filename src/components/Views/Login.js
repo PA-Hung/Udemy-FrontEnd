@@ -39,7 +39,7 @@ const Login = (props) => {
             return false
         }
         let response = await loginUser(valueLogin, password)
-        if (response && response.data && response.data.EC === 0) {
+        if (response && +response.EC === 0) {
             let data = {
                 isAuthenticated: true,
                 toke: 'faketoken'
@@ -49,8 +49,8 @@ const Login = (props) => {
             window.location.reload();
             // redux
         }
-        if (response && response.data && response.data.EC !== 0) {
-            toast.error(response.data.EM)
+        if (response && +response.EC !== 0) {
+            toast.error(response.EM)
         }
 
     }

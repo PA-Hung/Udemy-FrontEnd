@@ -1,11 +1,12 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useEffect, useState } from 'react'
-import { fetchGroup, createNewUser } from '../../services/apiService';
+import { fetchGroup, createNewUser, updateCurrentUser } from '../../services/apiService';
 import { toast } from 'react-toastify';
 import _ from 'lodash'
 
 const ModalUser = (props) => {
+    const { action, dataModalUser } = props // khai bao biến như vậy dùng không cần props chấm nữa
     const [userGroups, setUserGroups] = useState([])
     const defaultUserData = {
         email: '',
@@ -30,7 +31,32 @@ const ModalUser = (props) => {
 
     const [validInputs, setValidInput] = useState(validInputsDefault)
 
+    useEffect(() => {
+        getGroup()
+    }, [])
+
+    useEffect(() => {
+        if (props.action === 'UPDATE') {
+            //console.log('>>>>> check data update', props.dataModalUser)
+            setUserData({
+                ...props.dataModalUser,
+                group: dataModalUser.Group ? dataModalUser.Group.id : '',
+            })
+        }
+    }, [props.dataModalUser])
+
+    useEffect(() => {
+        if (action === 'CREATE') {
+            if (userGroups && userGroups.length > 0) {
+                setUserData({ ...userData, group: userGroups[0].id })
+            }
+        }
+    }, [action])
+
     const checkValidInputs = () => {
+        if (action === 'UPDATE') {
+            return true
+        }
         setValidInput(validInputsDefault)
         let arr = ['email', 'phone', 'password', 'group']
         let check = true
@@ -47,21 +73,17 @@ const ModalUser = (props) => {
         return check
     }
 
-    useEffect(() => {
-        getGroup()
-    }, [])
-
     const getGroup = async () => {
         let res = await fetchGroup()
-        if (res && res.data && res.data.EC === 0) {
-            setUserGroups(res.data.DT)
-            let dataGroup = res.data.DT
+        if (res && res.EC === 0) {
+            setUserGroups(res.DT)
+            let dataGroup = res.DT
             if (dataGroup && dataGroup.length > 0) {
                 setUserData({ ...userData, group: dataGroup[0].id })
-                console.log('>>>>>> check group ID', defaultUserData.group)
+                //console.log('>>>>>> check group ID', defaultUserData.group)
             }
         } else {
-            toast.error(res.data.EM)
+            toast.error(res.EM)
         }
     }
 
@@ -74,16 +96,43 @@ const ModalUser = (props) => {
     const handleSaveUser = async () => {
         let check = checkValidInputs()
         if (check === true) {
-            let res = await createNewUser({ ...userData, groupId: userData['group'] })
+            let res = action === 'CREATE' ? await createNewUser({ ...userData, groupId: userData['group'] })
+                : await updateCurrentUser({ ...userData, groupId: userData['group'] });
+
+            // let res = null;
+            // if (action === 'CREATE') {
+            //     res = await createNewUser({ ...userData, groupId: userData['group'] })
+            // } else {
+            //     res = await updateCurrentUser({ ...userData, groupId: userData['group'] })
+            // }
+
             // copy key của group và chuyển thành groupId cho giống trường trong database
             console.log('>>>>>>>> check res create new user', res)
-            if (res.data && res.data.EC === 0) {
+            if (res && res.EC === 0) {
                 props.onHide()
-                setUserData({ ...defaultUserData, group: userGroups[0].id })
-            } else {
-                toast.error('Error create user ..!')
+                setUserData({
+                    ...defaultUserData,
+                    group: userGroups[0].id && userGroups.length > 0 ? userGroups[0].id : ''
+                    // nếu phần tử đầu tiên userGroups có tồn tại và userGroups.length > 0
+                    // thì lấy phần tử đầu tiên cho group, còn ko thì gán rỗng
+                })
+            }
+            if (res && res.EC !== 0) {
+                if (res.DT === 'email') {
+                    setValidInput({ ...validInputsDefault, email: false })
+                }
+                if (res.DT === 'phone') {
+                    setValidInput({ ...validInputsDefault, phone: false })
+                }
+                toast.error(res.EM)
             }
         }
+    }
+
+    const handleCloseModalUser = () => {
+        props.onHide()
+        setUserData(defaultUserData)
+        setValidInput(validInputsDefault)
     }
 
     return (
@@ -94,17 +143,18 @@ const ModalUser = (props) => {
                 centered
                 show={props.show}
                 className='modal-user'
-                onHide={props.onHide}
+                onHide={() => handleCloseModalUser()}
             >
                 <Modal.Header closeButton >
                     <Modal.Title id="contained-modal-title-vcenter">
-                        <span>{props.title}</span>
+                        <span>{props.action === 'CREATE' ? 'Create new user' : 'Edit a user'}</span>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <div className='content-body row'>
                         <div className='col-12 col-sm-6 form-group mt-3'>
                             <input
+                                disabled={action === 'CREATE' ? false : true}
                                 className={validInputs.email ? 'form-control' : 'form-control is-invalid'}
                                 type='text'
                                 placeholder='Email'
@@ -114,6 +164,7 @@ const ModalUser = (props) => {
                         </div>
                         <div className='col-12 col-sm-6 form-group mt-3'>
                             <input
+                                disabled={action === 'CREATE' ? false : true}
                                 className={validInputs.phone ? 'form-control' : 'form-control is-invalid'}
                                 type='text'
                                 placeholder='Phone'
@@ -131,8 +182,10 @@ const ModalUser = (props) => {
                             />
                         </div>
                         <div className='col-12 col-sm-6 form-group mt-3'>
-                            <select className="form-select" aria-label="Gender"
+                            <select
+                                className="form-select" aria-label="Gender"
                                 onChange={(event) => handleonChangeInput(event.target.value, 'gender')}
+                                value={userData.sex}
                             >
                                 <option defaultValue="Male">Male</option>
                                 <option value="Female">Female</option>
@@ -140,19 +193,23 @@ const ModalUser = (props) => {
                         </div>
 
                         <div className='col-12 col-sm-6 form-group mt-3'>
-                            <input
-                                className={validInputs.password ? 'form-control' : 'form-control is-invalid'}
-                                type='password'
-                                placeholder='Password'
-                                value={userData.password}
-                                onChange={(event) => handleonChangeInput(event.target.value, 'password')}
-                            />
+                            {action === 'CREATE' &&
+                                <input
+                                    className={validInputs.password ? 'form-control' : 'form-control is-invalid'}
+                                    type='password'
+                                    placeholder='Password'
+                                    value={userData.password}
+                                    onChange={(event) => handleonChangeInput(event.target.value, 'password')}
+                                />
+                            }
                         </div>
 
                         <div className='col-12 col-sm-6 form-group mt-3'>
-                            <select className={validInputs.group ? 'form-select' : 'form-select is-invalid'}
+                            <select
+                                className={validInputs.group ? 'form-select' : 'form-select is-invalid'}
                                 aria-label="Group"
                                 onChange={(event) => handleonChangeInput(event.target.value, 'group')}
+                                value={userData.group}
                             >
                                 {
                                     userGroups.length > 0 && userGroups.map((item, index) => {
@@ -177,9 +234,11 @@ const ModalUser = (props) => {
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={props.onHide}>Close</Button>
+                    <Button variant="secondary" onClick={() => handleCloseModalUser()}>
+                        Close
+                    </Button>
                     <Button variant="primary" onClick={() => handleSaveUser()}>
-                        Save
+                        {action === 'CREATE' ? 'Save' : 'Update'}
                     </Button>
                 </Modal.Footer>
 

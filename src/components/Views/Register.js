@@ -89,7 +89,7 @@ const Register = (props) => {
         let check = isValidInputs()
         if (check === true) {
             let response = await registerNewUser(email, phone, username, pass)
-            let dataFromBackEnd = response.data
+            let dataFromBackEnd = response
             //console.log('>>>>>', dataFromBackEnd)
             if (+dataFromBackEnd.EC === 0) {
                 toast('🦄 Wow so easy create new user!',
@@ -126,11 +126,6 @@ const Register = (props) => {
 
     }
 
-    useEffect(() => {
-        // axios.get('http://localhost:6969/api/v1/test-api').then(data => {
-        //     console.log('>>>>>>> check data axiso:', data)
-        // })
-    }, [])
 
     return (
         <div className="register-container">
