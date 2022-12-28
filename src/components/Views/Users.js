@@ -71,10 +71,17 @@ const Users = (props) => {
         setActionModalUser('UPDATE')
         setIsShowModalUser(true)
         setDataModalUser(user)
+        //console.log('check user :', user.sex)
+        //console.log('check dataModalUser :', dataModalUser.sex)
     }
 
     const handleRefresh = async () => {
         await fetchUsers()
+    }
+
+    const logout = () => {
+        sessionStorage.clear()
+        window.location.href = '/login'
     }
 
     return (
@@ -85,7 +92,7 @@ const Users = (props) => {
                         <div className='title-table pt-5'><h3>Manage User</h3></div>
                         <div className='action d-flex justify-content-end'>
                             <button
-                                className='btn btn-success mx-3'
+                                className='btn btn-success mx-1'
                                 onClick={() => handleRefresh()}
                             ><i className="fa fa-refresh" /> Refresh</button>
                             <button className='btn btn-primary'
@@ -93,6 +100,9 @@ const Users = (props) => {
                                     setIsShowModalUser(true);
                                     setActionModalUser('CREATE')
                                 }}><i className="fa fa-plus-circle" /> Add new user</button>
+                            <button className='btn btn-dark mx-1'
+                                onClick={() => logout()}
+                            ><i className="fa fa-sign-out"></i> Logout</button>
                         </div>
                     </div>
                     <div><hr /></div>
@@ -104,6 +114,7 @@ const Users = (props) => {
                                     <th scope="col">ID</th>
                                     <th scope="col">Email</th>
                                     <th scope="col">Username</th>
+                                    <th scope="col">Gender</th>
                                     <th scope="col">Role</th>
                                     <th scope="col">Action</th>
                                 </tr>
@@ -118,18 +129,23 @@ const Users = (props) => {
                                                     <td>{item.id}</td>
                                                     <td>{item.email}</td>
                                                     <td>{item.username}</td>
+                                                    <td>{item.sex}</td>
                                                     <td>{item.Group ? item.Group.name : ''}</td>
 
                                                     <td>
-                                                        <div>
+                                                        <div className='d-flex justify-content-center'>
                                                             <button
-                                                                className='btn btn-warning mx-3'
+                                                                className='btn btn-warning mx-1'
                                                                 onClick={() => handleEditUser(item)}
-                                                            ><i className="fa fa-pencil-square-o" /> Edit</button>
+                                                            ><i className="fa fa-pencil-square-o" />
+                                                                <span className='d-none d-sm-inline'> Edit</span>
+                                                            </button>
                                                             <button
-                                                                className='btn btn-danger'
+                                                                className='btn btn-danger mx-1'
                                                                 onClick={() => handleDeleteUser(item)}
-                                                            ><i className="fa fa-trash-o" /> Delete</button>
+                                                            ><i className="fa fa-trash-o" />
+                                                                <span className='d-none d-sm-inline'> Delete</span>
+                                                            </button>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -139,7 +155,7 @@ const Users = (props) => {
                                     :
                                     <>
                                         <tr>
-                                            <td colSpan={6}>Not found users</td>
+                                            <td colSpan={7}>Not found users</td>
                                         </tr>
                                     </>
                                 }

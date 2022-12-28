@@ -88,8 +88,7 @@ const Register = (props) => {
     const handleRegister = async () => {
         let check = isValidInputs()
         if (check === true) {
-            let response = await registerNewUser(email, phone, username, pass)
-            let dataFromBackEnd = response
+            let dataFromBackEnd = await registerNewUser(email, phone, username, pass)
             //console.log('>>>>>', dataFromBackEnd)
             if (+dataFromBackEnd.EC === 0) {
                 toast('🦄 Wow so easy create new user!',

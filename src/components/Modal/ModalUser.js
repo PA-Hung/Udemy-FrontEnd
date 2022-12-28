@@ -14,7 +14,7 @@ const ModalUser = (props) => {
         username: '',
         password: '',
         address: '',
-        gender: '',
+        sex: '',
         group: ''
     }
     const [userData, setUserData] = useState(defaultUserData)
@@ -25,7 +25,7 @@ const ModalUser = (props) => {
         username: true,
         password: true,
         address: true,
-        gender: true,
+        sex: true,
         group: true
     }
 
@@ -36,21 +36,26 @@ const ModalUser = (props) => {
     }, [])
 
     useEffect(() => {
-        if (props.action === 'UPDATE') {
-            //console.log('>>>>> check data update', props.dataModalUser)
+        if (action === 'UPDATE') {
+            //console.log('>>>>> check dataModalUser.sex : ', dataModalUser.sex)
             setUserData({
-                ...props.dataModalUser,
+                ...dataModalUser,
                 group: dataModalUser.Group ? dataModalUser.Group.id : '',
             })
+            //console.log('>>>>> check userData.sex ', userData)
         }
     }, [props.dataModalUser])
 
     useEffect(() => {
         if (action === 'CREATE') {
             if (userGroups && userGroups.length > 0) {
-                setUserData({ ...userData, group: userGroups[0].id })
+                setUserData({
+                    ...userData,
+                    group: userGroups[0].id,
+                })
             }
         }
+
     }, [action])
 
     const checkValidInputs = () => {
@@ -90,14 +95,20 @@ const ModalUser = (props) => {
     const handleonChangeInput = (value, name) => {
         let _userData = _.cloneDeep(userData)
         _userData[name] = value
+        //console.log('>>>>>> check handle change input _userData.sex:', _userData.sex)
+        //console.log('>>>>>> check handle change input _userData.sex:', _userData.sex)
+
         setUserData(_userData)
+        //console.log('>>>>>> check handle change input:', _userData)
     }
 
     const handleSaveUser = async () => {
+        //console.log('>>>>>>>>> check user data send to server :', userData)
         let check = checkValidInputs()
         if (check === true) {
-            let res = action === 'CREATE' ? await createNewUser({ ...userData, groupId: userData['group'] })
-                : await updateCurrentUser({ ...userData, groupId: userData['group'] });
+            let res = action === 'CREATE'
+                ? await createNewUser({ ...userData, groupId: userData['group'], })
+                : await updateCurrentUser({ ...userData, groupId: userData['group'], });
 
             // let res = null;
             // if (action === 'CREATE') {
@@ -107,7 +118,7 @@ const ModalUser = (props) => {
             // }
 
             // copy key của group và chuyển thành groupId cho giống trường trong database
-            console.log('>>>>>>>> check res create new user', res)
+            //console.log('>>>>>>>> check res create new user', res)
             if (res && res.EC === 0) {
                 props.onHide()
                 setUserData({
@@ -184,10 +195,11 @@ const ModalUser = (props) => {
                         <div className='col-12 col-sm-6 form-group mt-3'>
                             <select
                                 className="form-select" aria-label="Gender"
-                                onChange={(event) => handleonChangeInput(event.target.value, 'gender')}
+                                onChange={(event) => handleonChangeInput(event.target.value, 'sex')}
                                 value={userData.sex}
                             >
-                                <option defaultValue="Male">Male</option>
+                                <option defaultValue="">Giới tính</option>
+                                <option Value="Male">Male</option>
                                 <option value="Female">Female</option>
                             </select>
                         </div>
