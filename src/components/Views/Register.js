@@ -1,7 +1,7 @@
 import './Register.scss'
 import facebook from '../../assets/images/facebook.png'
 import { useHistory } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { registerNewUser } from '../../services/apiService';
 
@@ -10,13 +10,6 @@ const Register = (props) => {
     const handleLogin = () => {
         history.push("/login");
     }
-
-    useEffect(() => {
-        let session = sessionStorage.getItem("account");
-        if (session) {
-            history.push("/");
-        }
-    }, [])
 
     // Hiển thị biểu tượng chấm thang ở các ô input, mặc định dc set là true
     const defaultValidInput = {

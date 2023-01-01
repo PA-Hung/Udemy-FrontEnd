@@ -1,16 +1,17 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import './Users.scss'
 import { fetchAllUser, deleteUser } from '../../services/apiService'
 import ReactPaginate from 'react-paginate';
 import { toast } from 'react-toastify';
 import ModalComfirm from '../Modal/ModalComfirm';
 import ModalUser from '../Modal/ModalUser';
+import { UserContext } from '../../context/UserContext';
 
 
 const Users = (props) => {
     const [listUsers, setListUsers] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
-    const [currentLitmit, setCurrentLimit] = useState(10)
+    const [currentLitmit, setCurrentLimit] = useState(10) // eslint-disable-line react-hooks/exhaustive-deps
     const [totalPages, setTotalPages] = useState(0)
     const [isShowModalComfirm, setIsShowModalComfirm] = useState(false)
 
@@ -41,7 +42,6 @@ const Users = (props) => {
         console.log('>>>>>>>>>> check data')
         setDataModal(user)
         setIsShowModalComfirm(true)
-
     }
 
     const handleClose = () => {
