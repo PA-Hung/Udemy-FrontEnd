@@ -3,6 +3,7 @@ import Login from "../components/Views/Login";
 import Register from "../components/Views/Register";
 import Users from "../components/Views/Users";
 import PrivateRoutes from "./PrivateRoutes";
+import Role from "../components/Views/Role";
 
 const AppRoutes = (props) => {
 
@@ -18,6 +19,7 @@ const AppRoutes = (props) => {
 
                 <PrivateRoutes path="/projects" component={Projet} />
                 <PrivateRoutes path="/users" component={Users} />
+                <PrivateRoutes path="/roles" component={Role} />
 
                 <Route exact path="/">
                     Home

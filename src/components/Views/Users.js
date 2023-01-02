@@ -79,11 +79,6 @@ const Users = (props) => {
         await fetchUsers()
     }
 
-    const logout = () => {
-        sessionStorage.clear()
-        window.location.href = '/login'
-    }
-
     return (
         <>
             <div className='container'>
@@ -100,9 +95,7 @@ const Users = (props) => {
                                     setIsShowModalUser(true);
                                     setActionModalUser('CREATE')
                                 }}><i className="fa fa-plus-circle" /> Add new user</button>
-                            <button className='btn btn-dark mx-1'
-                                onClick={() => logout()}
-                            ><i className="fa fa-sign-out"></i> Logout</button>
+
                         </div>
                     </div>
                     <div><hr /></div>

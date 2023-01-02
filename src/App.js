@@ -1,4 +1,4 @@
-import Nav from "./components/Navigation/Nav";
+import NavHeader from "./components/Navigation/NavHeader";
 import AppRoutes from "./routers/AppRoutes";
 import React, { useEffect, useState } from "react";
 import './App.scss';
@@ -31,7 +31,7 @@ function App() {
           :
           <>
             <div className="app-header">
-              <Nav />
+              <NavHeader />
             </div>
             <div className="App">
               <header className="App-container">
