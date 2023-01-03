@@ -103,8 +103,8 @@ const Users = (props) => {
                         <table className='table table-striped table-hover table-bordered'>
                             <thead>
                                 <tr className='table-primary'>
-                                    <th scope="col">#</th>
-                                    <th scope="col">ID</th>
+                                    <th scope="col" className='text-center align-middle'>#</th>
+                                    {/* <th scope="col">ID</th> */}
                                     <th scope="col">Email</th>
                                     <th scope="col">Username</th>
                                     <th scope="col">Gender</th>
@@ -118,12 +118,14 @@ const Users = (props) => {
                                         {listUsers.map((item, index) => {
                                             return (
                                                 <tr key={`row-${index}`}>
-                                                    <th scope="row">{(currentPage - 1) * currentLitmit + index + 1}</th>
-                                                    <td>{item.id}</td>
-                                                    <td>{item.email}</td>
-                                                    <td>{item.username}</td>
-                                                    <td>{item.sex}</td>
-                                                    <td>{item.Group ? item.Group.name : ''}</td>
+                                                    <th scope="row" className='text-center align-middle'>
+                                                        {(currentPage - 1) * currentLitmit + index + 1}
+                                                    </th>
+                                                    <td className='d-none'>{item.id}</td>
+                                                    <td className='align-middle'>{item.email}</td>
+                                                    <td className='align-middle'>{item.username}</td>
+                                                    <td className='align-middle'>{item.sex}</td>
+                                                    <td className='align-middle'>{item.Group ? item.Group.name : ''}</td>
 
                                                     <td>
                                                         <div className='d-flex justify-content-center'>

@@ -198,7 +198,10 @@ const ModalUser = (props) => {
                                 onChange={(event) => handleonChangeInput(event.target.value, 'sex')}
                                 value={userData.sex}
                             >
-                                <option defaultValue="">Giới tính</option>
+                                {userData.sex === 'Male' && userData.sex === 'Female'
+                                    ? <option defaultValue="">Giới tính</option>
+                                    : <option defaultValue="" style={{ display: 'none' }}>Giới tính</option>
+                                }
                                 <option Value="Male">Male</option>
                                 <option value="Female">Female</option>
                             </select>
