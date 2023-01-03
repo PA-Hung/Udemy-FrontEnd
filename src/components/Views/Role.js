@@ -2,39 +2,76 @@ import './Role.scss'
 import { useEffect, useState } from 'react'
 import _ from 'lodash'
 import { v4 as uuidv4 } from 'uuid';
+import { toast } from 'react-toastify';
+import { createRoles } from '../../services/roleService';
 
 const Role = (props) => {
-
+    const dataChildDefault = { url: '', description: '', isValidURL: true }
     const [listChilds, setListChilds] = useState({
-        child1: { url: '', description: '' }
+        child1: dataChildDefault
     })
 
     useEffect(() => {
         Object.entries(listChilds).map(([key, value]) => {
-            console.log(key)
-            console.log(value)
+            //console.log(key)
+            //console.log(value)
         })
     }, [])
 
     const handleOnChangeInput = (name, value, key) => {
         let _listChilds = _.cloneDeep(listChilds)
         _listChilds[key][name] = value
+        if (value && name === 'url') {
+            _listChilds[key]['isValidURL'] = true
+        }
         setListChilds(_listChilds)
     }
 
     const handleAddNewURL = () => {
         let _listChilds = _.cloneDeep(listChilds)
-        _listChilds[`child-${uuidv4()}`] = {
-            url: '', description: ''
-        }
+        _listChilds[`child-${uuidv4()}`] = dataChildDefault
         setListChilds(_listChilds)
     }
 
     const handleRemoveURL = (key) => {
         let _listChilds = _.cloneDeep(listChilds)
+        console.log(_listChilds[key])
         delete _listChilds[key]
         setListChilds(_listChilds)
     }
+
+    const buildDataToPersist = () => {
+        let _listChilds = _.cloneDeep(listChilds)
+        let result = []
+        Object.entries(_listChilds).map(([key, child], index) => {
+            result.push({
+                url: child.url,
+                description: child.description
+            })
+        })
+        return result
+    }
+
+    const handleSave = async () => {
+        let inValidOJB = Object.entries(listChilds).find(([key, child], index) => {
+            return child && !child.url
+        })
+        if (!inValidOJB) {
+            let data = buildDataToPersist()
+            let res = await createRoles(data)
+            if (res && res.EC === 0) {
+                toast.success(res.EM)
+            }
+        } else {
+            toast.error('Input URL must not be empty !')
+            let _listChilds = _.cloneDeep(listChilds)
+            const key = inValidOJB[0]
+            _listChilds[key]['isValidURL'] = false
+            setListChilds(_listChilds)
+        }
+    }
+
+    //console.log(listChilds)
 
     return (
         <>
@@ -48,9 +85,9 @@ const Role = (props) => {
                                     return (
                                         <div className='role-child row' key={`child-${key}`}>
                                             <div className={`col-5 form-group ${key}`}>
-                                                <label>URL :</label>
+                                                <label>URL : /user/read (demo)</label>
                                                 <input type='type'
-                                                    className='form-control'
+                                                    className={child.isValidURL ? 'form-control' : 'form-control is-invalid'}
                                                     value={child.url}
                                                     onChange={(event) => handleOnChangeInput('url', event.target.value, key)}
                                                 />
@@ -79,7 +116,10 @@ const Role = (props) => {
                                 })
                             }
                             <div>
-                                <button className='btn btn-primary mt-3'>Save</button>
+                                <button className='btn btn-primary mt-3'
+                                    onClick={() => handleSave()}
+
+                                >Save</button>
                             </div>
 
                         </div>
