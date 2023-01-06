@@ -11,7 +11,7 @@ import { UserContext } from '../../context/UserContext';
 const Users = (props) => {
     const [listUsers, setListUsers] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
-    const [currentLitmit, setCurrentLimit] = useState(10) // eslint-disable-line react-hooks/exhaustive-deps
+    const [currentLitmit, setCurrentLimit] = useState(10)
     const [totalPages, setTotalPages] = useState(0)
     const [isShowModalComfirm, setIsShowModalComfirm] = useState(false)
 

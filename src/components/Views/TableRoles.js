@@ -1,7 +1,7 @@
 import './TableRoles.scss'
 import React, { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
 import { toast } from 'react-toastify';
-import { fetchRoles, deleteRole } from '../../services/roleService'
+import { fetchAllRoles, deleteRole } from '../../services/roleService'
 
 const TableRoles = forwardRef((props, ref) => {
     const [listRoles, setListRoles] = useState([])
@@ -26,14 +26,15 @@ const TableRoles = forwardRef((props, ref) => {
     }))
 
     const getAllRoles = async () => {
-        let res = await fetchRoles()
+        let res = await fetchAllRoles()
         if (res && +res.EC === 0) {
             setListRoles(res.DT)
-            console.log('>>>>>>>> check list role', listRoles)
+            //console.log('>>>>>>>> check list role', listRoles)
         } else {
             toast.error(res.EM)
         }
     }
+
     const handleDeleteRole = async (role) => {
         let response = await deleteRole(role)
         if (response && response.EC === 0) {
@@ -57,7 +58,7 @@ const TableRoles = forwardRef((props, ref) => {
             </thead>
             <tbody>
                 {/* Loop through your data and render each row */}
-                {listRoles.map((item, index) => (
+                {listRoles.length > 0 && listRoles.map((item, index) => (
                     <React.Fragment key={item.id}>
                         <tr>
                             <td className='align-middle'>{index + 1}</td>

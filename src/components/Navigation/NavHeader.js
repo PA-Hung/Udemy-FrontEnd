@@ -50,6 +50,7 @@ const NavHeader = (props) => {
                                     <NavLink to="/" className='nav-link' exact>Home</NavLink>
                                     <NavLink to="/users" className='nav-link'>Manager</NavLink>
                                     <NavLink to="/roles" className='nav-link'>Roles</NavLink>
+                                    <NavLink to="/rolebygroup" className='nav-link'>Roles Group</NavLink>
                                     <NavLink to="/projects" className='nav-link'>Project</NavLink>
                                 </Nav>
                             </Navbar.Collapse>
