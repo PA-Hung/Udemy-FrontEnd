@@ -12,6 +12,7 @@ import { UserContext } from "./context/UserContext";
 
 function App() {
   const { user } = React.useContext(UserContext)
+  console.log('>>>>>>>>>>>>>>>>>>>>>>>', process.env.REACT_APP_BACKEND_URL)
   return (
     <>
       <Router>
@@ -45,7 +46,7 @@ function App() {
 
       <ToastContainer
         position="top-right"
-        autoClose={5000}
+        autoClose={3000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

@@ -1,8 +1,16 @@
 /* Add a black background color to the top navigation */
 
 .nav-header {
+  padding-bottom:0.5rem;
+  .navbar{
+      padding-bottom: 0 !important;
+  }
+
   .bg-header {
     background-color: #20232a;
+    .nav-brand{
+      padding-bottom: 1!important;
+    }
   }
   a, .nav-link {
     color: white !important; // important để ghi đè lại bootstrap
@@ -35,6 +43,7 @@
   .nav-link{
     &.active {
       color: #61dafb !important;
+      border-bottom: 2px solid;
     }
   }
   .dropdown-menu {

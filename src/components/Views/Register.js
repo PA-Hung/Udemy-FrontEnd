@@ -1,11 +1,13 @@
 import './Register.scss'
 import facebook from '../../assets/images/facebook.png'
 import { useHistory } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { registerNewUser } from '../../services/apiService';
+import { UserContext } from '../../context/UserContext';
 
 const Register = (props) => {
+    const { user } = useContext(UserContext)
     let history = useHistory();
     const handleLogin = () => {
         history.push("/login");
@@ -117,7 +119,11 @@ const Register = (props) => {
         }
 
     }
-
+    useEffect(() => {
+        if (user && user.isAuthenticated) {
+            history.push('/')
+        }
+    }, [])
 
     return (
         <div className="register-container">

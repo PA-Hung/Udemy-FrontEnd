@@ -46,7 +46,7 @@ const NavHeader = (props) => {
                             </Navbar.Brand>
                             <Navbar.Toggle aria-controls="basic-navbar-nav" />
                             <Navbar.Collapse id="basic-navbar-nav">
-                                <Nav className="me-auto">
+                                <Nav className="navbar-menu me-auto">
                                     <NavLink to="/" className='nav-link' exact>Home</NavLink>
                                     <NavLink to="/users" className='nav-link'>Manager</NavLink>
                                     <NavLink to="/roles" className='nav-link'>Roles</NavLink>

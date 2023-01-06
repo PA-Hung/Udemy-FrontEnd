@@ -1,14 +1,14 @@
 import './Login.scss'
 import facebook from '../../assets/images/facebook.png'
-import { useHistory } from 'react-router-dom';
-import { useState, useContext } from 'react';
+import { useHistory, Link } from 'react-router-dom';
+import { useState, useContext, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { loginUser } from '../../services/apiService'
 import { UserContext } from '../../context/UserContext';
 
 
 const Login = (props) => {
-    const { loginContext } = useContext(UserContext);
+    const { user, loginContext } = useContext(UserContext);
     let history = useHistory();
 
     const [valueLogin, setValueLogin] = useState('')
@@ -65,6 +65,12 @@ const Login = (props) => {
     const handleCreateNewAccount = () => {
         history.push("/register");
     }
+
+    useEffect(() => {
+        if (user && user.isAuthenticated) {
+            history.push('/')
+        }
+    }, [user])
 
     return (
         <div className="login-container">

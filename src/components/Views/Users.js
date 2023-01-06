@@ -5,7 +5,6 @@ import ReactPaginate from 'react-paginate';
 import { toast } from 'react-toastify';
 import ModalComfirm from '../Modal/ModalComfirm';
 import ModalUser from '../Modal/ModalUser';
-import { UserContext } from '../../context/UserContext';
 
 
 const Users = (props) => {
@@ -28,9 +27,14 @@ const Users = (props) => {
         let response = await fetchAllUser(currentPage, currentLitmit)
         if (response && response && response.EC === 0) {
             setTotalPages(response.DT.totalPages)
-            setListUsers(response.DT.users)
+            if (response.DT.totalPages > 0 && response.DT.users.length === 0) {
+                setCurrentPage(response.DT.totalPages)
+                await fetchAllUser(response.DT.totalPages, currentLitmit)
+            }
+            if (response.DT.totalPages > 0 && response.DT.users.length > 0) {
+                setListUsers(response.DT.users)
+            }
         }
-        //console.log('check >>>>>>>>> list user :', response.DT)
     }
 
     const handlePageClick = async (event) => {
@@ -179,6 +183,7 @@ const Users = (props) => {
                                 containerClassName="pagination"
                                 activeClassName="active"
                                 renderOnZeroPageCount={null}
+                                forcePage={+currentPage - 1}
                             />
                         </div>
                     }

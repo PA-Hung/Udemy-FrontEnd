@@ -51,11 +51,12 @@ const UserProvider = ({ children }) => {
     }
 
     useEffect(() => {
-        if (location !== '/' && location !== '/login') {
-            fecthUser()
-        } else {
-            setUser({ ...user, isLoading: false })
-        }
+        // if (location !== '/' && location !== '/login') {
+        //     fecthUser()
+        // } else {
+        //     setUser({ ...user, isLoading: false })
+        // }
+        fecthUser()
     }, [])
 
     return (
